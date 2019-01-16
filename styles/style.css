@@ -44,7 +44,7 @@ body{background:skyblue;}
 }
 
 #logo {float:left;}
-#banner{float:right;}
+#banner {float:left;}
 
 .menubar {
 	width:1000px;
@@ -85,21 +85,18 @@ display:inline;
 
 .content_wrapper {
 	width:1000px;
-	height:800px;
 	margin:auto;
 	background:pink;
 }
 
 #content_area {
 	width:800px;
-	height:800px;
 	float:right;
 	background:pink;
 }
 
 #sidebar {
 	width:200px;
-	height:800px;
 	background:black;
 	float:left;
 }
