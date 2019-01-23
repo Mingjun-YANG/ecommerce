@@ -1,6 +1,118 @@
 <?php
 //getting the categories
 $con = mysqli_connect("localhost","root","","ecommerce");
+
+//getting the user IP address
+function getIp() {
+    $ip = $_SERVER['REMOTE_ADDR'];
+
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }
+
+    return $ip;
+}
+
+function cart(){
+
+    if(isset($_GET['add_cart'])){
+
+        global $con;
+
+        $ip = getIp();
+
+        $pro_id = $_GET['add_cart'];
+
+        $check_pro = "select * from cart where ip_add='$ip' AND p_id='$pro_id'";
+
+        $run_check = mysqli_query($con, $check_pro);
+
+        if(mysqli_num_rows($run_check)>0){
+
+            echo "";
+
+        }
+        else {
+
+            $insert_pro = "insert into cart (p_id,ip_add) values ('$pro_id','$ip')";
+
+            $run_pro = mysqli_query($con, $insert_pro);
+
+            echo "<script>window.open('index.php','_self')</script>";
+        }
+
+    }
+
+}
+
+//getting the total added items
+
+function total_items() {
+
+    if(isset($_GET['add_cart'])) {
+
+        global $con;
+
+        $ip = getIp();
+
+        $get_items = "select * from cart where ip_add='$ip'";
+
+        $run_items = mysqli_query($con, $get_items);
+
+        $count_items = mysqli_num_rows($run_items);
+
+    }
+    else {
+        global $con;
+
+        $ip = getIp();
+
+        $get_items = "select * from cart where ip_add='$ip'";
+
+        $run_items = mysqli_query($con, $get_items);
+
+        $count_items = mysqli_num_rows($run_items);
+    }
+
+    echo $count_items;
+
+}
+
+//calculate total price of the items in cart
+
+function total_price() {
+    global $con;
+
+    $ip = getIp();
+
+    $select_price = "select * from cart where ip_add='$ip'";
+
+    $run_price = mysqli_query($con, $select_price);
+
+    $count = 0;
+
+    while($p_price=mysqli_fetch_array($run_price)) {
+
+        $pro_id = $p_price['p_id'];
+
+        $pro_price = "select * from products where product_id='$pro_id'";
+
+        $run_pro_price = mysqli_query($con, $pro_price);
+
+        while($pp_price = mysqli_fetch_array($run_pro_price)) {
+
+            $product_price = array($pp_price['product_price']);
+
+            $values = array_sum($product_price);
+
+            $count = $count + $values;
+        }
+    }
+
+    echo "$" . $count;
+}
 function getCats() {
 
     global $con;

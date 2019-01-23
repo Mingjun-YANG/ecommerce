@@ -65,10 +65,10 @@ include ("functions/functions.php")
             </div>
 		
 			<div id="content_area">
-
+                <?php cart(); ?>
                 <div id="shopping_cart">
                     <span style="float:right; font-size:18px; padding: 5px; line-height: 40px;">
-                        Welcome Guest! <b style="color:yellow">Shopping Cart - </b> Total Items: Total Price: <a href="cart.php">Go to Cart</a>
+                        Welcome Guest! <b style="color:yellow">Shopping Cart - </b> Total Items: <?php total_items() ?> Total Price: <?php total_price() ?><a href="cart.php">Go to Cart</a>
                     </span>
                 </div>
 
