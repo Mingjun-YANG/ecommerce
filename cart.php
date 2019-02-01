@@ -1,6 +1,7 @@
 <!DOCTYPE>
 <?php
-include ("functions/functions.php")
+include ("functions/functions.php");
+session_start()
 ?>
 <html>
 <head>
@@ -121,11 +122,25 @@ include ("functions/functions.php")
                         ?>
 
                         <tr align="center">
-                            <td><input type="checkbox" name="remove[]" value="<?php echo $pro_id ?>"/></td>
+                            <td><input type="checkbox" name="remove" value="<?php echo $pro_id ?>"/></td>
                             <td><?php echo  $product_title; ?><br>
                             <img src="admin_area/product_images/<?php echo $product_image;?>" width="60" height="60" />
                             </td>
-                            <td><input type="text" size="4" name="qty" </td>
+                            <td><input type="text" size="4" name="qty" value="<?php echo $_SESSION['qty'];?>"</td>
+                            <?php
+                                if(isset($_POST['update_cart'])) {
+
+                                    $qty = $_POST['qty'];
+
+                                    $update_qty = "update cart set qty='$qty'";
+
+                                    $run_qty = mysqli_query($con, $update_qty);
+
+                                    $_SESSION['qty']=$qty;
+
+                                    $total = $total*$qty;
+                                }
+                            ?>
                             <td><?php echo"$" . $single_price; ?></td>
                         </tr>
                         <?php } } ?>
@@ -143,10 +158,13 @@ include ("functions/functions.php")
                 </form>
 
                 <?php
-                global $con;
+                function updateCart()
+                {
 
-                $ip = getIp();
-                    if(isset($_POST['update_cart'])) {
+                    global $con;
+
+                    $ip = getIp();
+                    if (isset($_POST['update_cart'])) {
 
                         foreach ($_POST['remove'] as $remove_id) {
 
@@ -154,19 +172,21 @@ include ("functions/functions.php")
 
                             $run_delete = mysqli_query($con, $delete_product);
 
-                            if($run_delete) {
+                            if ($run_delete) {
 
                                 echo "<script>window.open('cart.php', '_self')</script>";
 
                             }
+                            echo @$up_cart = updateCart();
                         }
                     }
 
-                    if(isset($_POST['continue'])) {
+                    if (isset($_POST['continue'])) {
 
                         echo "<script>window.open('index.php', '_self')</script>";
 
                     }
+                }
                 ?>
 
             </div>
